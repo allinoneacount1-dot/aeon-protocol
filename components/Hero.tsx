@@ -47,7 +47,7 @@ export default function Hero() {
           </motion.p>
 
           {/* Headline */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-light tracking-tight text-center leading-[1.1] max-w-5xl">
+          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-light tracking-tight text-center leading-[1.1] max-w-5xl mx-auto">
             {words.map((word, i) => (
               <Word key={i} word={word} index={i} />
             ))}
