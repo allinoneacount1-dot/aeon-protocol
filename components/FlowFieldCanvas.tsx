@@ -25,8 +25,10 @@ function ShaderPlane() {
     uniforms.uTime.value = state.clock.elapsedTime;
     uniforms.uResolution.value.set(size.width, size.height);
 
-    // Lerp mouse
-    targetMouseRef.current.set(state.pointer.x * 0.5 + 0.5, state.pointer.y * 0.5 + 0.5);
+    targetMouseRef.current.set(
+      state.pointer.x * 0.5 + 0.5,
+      state.pointer.y * 0.5 + 0.5
+    );
     mouseRef.current.lerp(targetMouseRef.current, 0.03);
     uniforms.uMouse.value.copy(mouseRef.current);
   });
@@ -52,11 +54,12 @@ function ShaderPlane() {
 
 export default function FlowFieldCanvas() {
   return (
-    <div className="absolute inset-0 z-0">
+    <div style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}>
       <Canvas
         gl={{ antialias: true, alpha: false }}
         camera={{ position: [0, 0, 1], fov: 50 }}
         dpr={[1, 1.5]}
+        style={{ width: "100%", height: "100%" }}
       >
         <ShaderPlane />
       </Canvas>

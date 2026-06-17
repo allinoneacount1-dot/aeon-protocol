@@ -15,78 +15,119 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.4], [0, -60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.35], [0, -50]);
   const clipPath = useTransform(
     scrollYProgress,
-    [0.05, 0.4],
+    [0.05, 0.35],
     ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"]
   );
 
   return (
-    <div ref={containerRef} className="relative min-h-[250vh]">
-      <div className="sticky top-0 h-[100dvh] overflow-hidden">
-        {/* Shader background */}
-        <FlowFieldCanvas />
+    <div ref={containerRef} style={{ position: "relative", height: "250vh" }}>
+      {/* Sticky container */}
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          width: "100%",
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
+        {/* Shader background - must fill entire viewport */}
+        <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+          <FlowFieldCanvas />
+        </div>
 
-        {/* Hero content - asymmetric layout */}
+        {/* Hero content */}
         <motion.div
           style={{ opacity, y, clipPath }}
-          className="relative z-10 h-full flex flex-col justify-end px-6 md:px-10 lg:px-16 pb-16 md:pb-24 mix-blend-multiply"
+          className="mix-blend-multiply"
         >
-          {/* Top-left: minimal identifier */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1.5 }}
-            className="absolute top-24 md:top-28 left-6 md:left-10 lg:left-16"
+          <div
+            style={{
+              position: "relative",
+              zIndex: 10,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-end",
+              padding: "24px",
+              paddingBottom: "64px",
+            }}
           >
-            <p className="font-mono-label text-ash">
+            {/* Top-left identifier */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 1.5 }}
+              className="font-mono-label text-ash"
+              style={{ position: "absolute", top: "100px", left: "24px" }}
+            >
               Est. before time
-            </p>
-          </motion.div>
+            </motion.p>
 
-          {/* Headline - left-aligned, massive, asymmetric */}
-          <div className="max-w-4xl">
-            <motion.h1
-              initial={{ opacity: 0, y: 60 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-              className="font-display text-[2.8rem] md:text-6xl lg:text-[5rem] xl:text-[5.8rem] font-medium tracking-tight leading-[0.95] text-left"
-            >
-              What survives
-              <br />
-              <span className="text-oxide">the next</span>
-              <br />
-              aeon?
-            </motion.h1>
+            {/* Headline */}
+            <div style={{ maxWidth: "800px" }}>
+              <motion.h1
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="font-display"
+                style={{
+                  fontSize: "clamp(2.5rem, 7vw, 5.5rem)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 0.95,
+                  textAlign: "left",
+                  color: "var(--ink)",
+                }}
+              >
+                What survives
+                <br />
+                <span style={{ color: "var(--oxide)" }}>the next</span>
+                <br />
+                aeon?
+              </motion.h1>
 
-            {/* Sub-label */}
+              {/* Sub-label */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.2, duration: 1 }}
+                style={{
+                  marginTop: "32px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "16px",
+                }}
+              >
+                <div style={{ width: "48px", height: "1px", background: "var(--oxide)" }} />
+                <p className="font-mono-label text-ash">
+                  A protocol for the long now
+                </p>
+              </motion.div>
+            </div>
+
+            {/* Right-side vertical text */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2, duration: 1 }}
-              className="mt-8 md:mt-12 flex items-center gap-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.8, duration: 1.5 }}
+              className="font-mono-label text-ash"
+              style={{
+                position: "absolute",
+                bottom: "64px",
+                right: "24px",
+                writingMode: "vertical-lr",
+                fontSize: "0.5rem",
+                opacity: 0.5,
+              }}
             >
-              <span className="w-12 h-px bg-oxide" />
-              <p className="font-mono-label text-ash">
-                A protocol for the long now
-              </p>
+              Block 5,120,000+
             </motion.div>
           </div>
-
-          {/* Right-side vertical text */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.8, duration: 1.5 }}
-            className="absolute bottom-16 md:bottom-24 right-6 md:right-10 lg:right-16 hidden md:block"
-            style={{ writingMode: "vertical-lr" }}
-          >
-            <p className="font-mono-label text-ash text-[0.5rem]">
-              ÆON Protocol - Block 5,120,000+
-            </p>
-          </motion.div>
         </motion.div>
       </div>
     </div>

@@ -17,36 +17,29 @@ export default function Home() {
 
 function Manifesto() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], ["5%", "-5%"]);
 
   return (
-    <section ref={ref} className="relative bg-ink text-bone overflow-hidden">
-      {/* Diagonal accent line */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 right-[15%] w-px h-full bg-oxide/10 origin-top rotate-12" />
-        <div className="absolute top-0 right-[25%] w-px h-full bg-oxide/5 origin-top -rotate-6" />
+    <section ref={ref} className="bg-ink text-bone overflow-hidden">
+      {/* Diagonal accent lines */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none" }}>
+        <div style={{ position: "absolute", top: 0, right: "15%", width: "1px", height: "100%", background: "rgba(166,67,31,0.1)", transformOrigin: "top", transform: "rotate(12deg)" }} />
       </div>
 
-      <div className="relative z-10 px-6 md:px-10 lg:px-16 py-32 md:py-48 lg:py-56">
-        <div className="max-w-6xl mx-auto">
-          {/* Manifesto label - NOT centered, left-aligned with offset */}
+      <div style={{ position: "relative", zIndex: 10, padding: "128px 24px" }}>
+        <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+          {/* Manifesto label */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 1.2 }}
-            className="mb-20 md:mb-28"
+            style={{ marginBottom: "80px" }}
           >
             <span className="font-mono-label text-oxide">Manifesto</span>
           </motion.div>
 
-          {/* Main manifesto lines - asymmetric stagger */}
-          <div className="space-y-4 md:space-y-6">
+          {/* Main manifesto lines */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
             {[
               { text: "We do not build for the quarter.", indent: false },
               { text: "We build for the epoch.", indent: false },
@@ -60,7 +53,7 @@ function Manifesto() {
             ].map((line, i) => (
               <motion.p
                 key={i}
-                initial={{ opacity: 0, x: line.indent ? 40 : -20 }}
+                initial={{ opacity: 0, x: line.indent ? 30 : -15 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, margin: "-8%" }}
                 transition={{
@@ -68,11 +61,15 @@ function Manifesto() {
                   delay: i * 0.06,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className={`font-display font-medium leading-[1.15] tracking-tight ${
-                  line.indent
-                    ? "text-xl md:text-2xl lg:text-3xl text-bone/60 pl-0 md:pl-24"
-                    : "text-2xl md:text-3xl lg:text-[2.5rem]"
-                }`}
+                className="font-display"
+                style={{
+                  fontSize: line.indent ? "clamp(1.1rem, 2.5vw, 1.6rem)" : "clamp(1.3rem, 3vw, 2.2rem)",
+                  fontWeight: 500,
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.01em",
+                  color: line.indent ? "rgba(237,230,216,0.5)" : "var(--bone)",
+                  paddingLeft: line.indent ? "0" : "0",
+                }}
               >
                 {line.text}
               </motion.p>
@@ -85,16 +82,22 @@ function Manifesto() {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-24 md:mt-32 h-px bg-ash/30 origin-left max-w-md"
+            style={{
+              marginTop: "96px",
+              height: "1px",
+              background: "rgba(146,138,122,0.3)",
+              transformOrigin: "left",
+              maxWidth: "280px",
+            }}
           />
 
-          {/* Bottom attribution */}
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, delay: 0.6 }}
-            className="mt-8 font-mono-label text-ash/50"
+            className="font-mono-label"
+            style={{ marginTop: "32px", color: "rgba(146,138,122,0.4)" }}
           >
             ÆON - since before time, until after
           </motion.p>
@@ -106,39 +109,63 @@ function Manifesto() {
 
 function SedimentSection() {
   return (
-    <section className="relative bg-bone py-32 md:py-48 px-6 md:px-10 lg:px-16 overflow-hidden">
-      {/* Background texture lines */}
-      <div className="absolute inset-0 pointer-events-none opacity-[0.03]">
+    <section className="bg-bone overflow-hidden" style={{ padding: "128px 24px" }}>
+      {/* Background horizontal lines */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: 0.03 }}>
         {Array.from({ length: 20 }).map((_, i) => (
           <div
             key={i}
-            className="absolute left-0 right-0 h-px bg-ink"
-            style={{ top: `${i * 5}%` }}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              height: "1px",
+              background: "var(--ink)",
+              top: `${i * 5}%`,
+            }}
           />
         ))}
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
-          {/* Left column - large display */}
-          <div className="md:col-span-5">
+      <div style={{ maxWidth: "1100px", margin: "0 auto", position: "relative", zIndex: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "48px" }}>
+          {/* Left column */}
+          <div>
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2 }}
             >
-              <span className="font-mono-label text-oxide block mb-6">
+              <span className="font-mono-label text-oxide" style={{ display: "block", marginBottom: "24px" }}>
                 The Principle
               </span>
-              <h2 className="font-display text-3xl md:text-4xl lg:text-5xl font-medium tracking-tight leading-[1.1] mb-8">
+              <h2
+                className="font-display"
+                style={{
+                  fontSize: "clamp(1.8rem, 4vw, 3rem)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.1,
+                  marginBottom: "32px",
+                  color: "var(--ink)",
+                }}
+              >
                 Sediment
                 <br />
-                <span className="text-oxide">does not</span>
+                <span style={{ color: "var(--oxide)" }}>does not</span>
                 <br />
                 speculate.
               </h2>
-              <p className="font-display text-lg text-ink/60 leading-relaxed max-w-sm">
+              <p
+                className="font-display"
+                style={{
+                  fontSize: "1rem",
+                  color: "rgba(22,19,14,0.55)",
+                  lineHeight: 1.7,
+                  maxWidth: "400px",
+                }}
+              >
                 It accumulates, compresses, and becomes rock. The protocols that
                 survive are the ones that outlive their founders&apos; grandchildren.
               </p>
@@ -146,32 +173,46 @@ function SedimentSection() {
           </div>
 
           {/* Right column - visual block + data */}
-          <div className="md:col-span-7 md:col-start-7">
+          <div>
             <motion.div
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1.2, delay: 0.2 }}
-              className="relative"
             >
               {/* Decorative block */}
-              <div className="aspect-[4/3] bg-gradient-to-br from-oxide/10 via-verdigris/5 to-transparent border border-ash/20 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,var(--ochre)_0%,transparent_50%)] opacity-10" />
-                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
-                  <p className="font-mono-label text-ash/60 mb-2">
+              <div
+                style={{
+                  aspectRatio: "4/3",
+                  background: "linear-gradient(135deg, rgba(166,67,31,0.08), rgba(63,94,78,0.04), transparent)",
+                  border: "1px solid rgba(146,138,122,0.2)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "radial-gradient(circle at 30% 40%, var(--ochre) 0%, transparent 50%)",
+                    opacity: 0.08,
+                  }}
+                />
+                <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px" }}>
+                  <p className="font-mono-label" style={{ color: "rgba(146,138,122,0.5)", marginBottom: "8px" }}>
                     Current Stratum
                   </p>
-                  <p className="font-display text-4xl md:text-5xl font-medium text-oxide">
+                  <p className="font-display" style={{ fontSize: "2.5rem", fontWeight: 500, color: "var(--oxide)" }}>
                     5,120,000
                   </p>
-                  <p className="font-mono-label text-ash/40 mt-1">
+                  <p className="font-mono-label" style={{ color: "rgba(146,138,122,0.35)", marginTop: "4px" }}>
                     blocks deep
                   </p>
                 </div>
               </div>
 
-              {/* Stats row beneath */}
-              <div className="grid grid-cols-3 gap-4 mt-4">
+              {/* Stats row */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "16px", marginTop: "16px" }}>
                 {[
                   { value: "10,522", label: "days" },
                   { value: "156M+", label: "transactions" },
@@ -179,16 +220,16 @@ function SedimentSection() {
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.4 + i * 0.1 }}
-                    className="border-t border-ash/30 pt-4"
+                    style={{ borderTop: "1px solid rgba(146,138,122,0.3)", paddingTop: "16px" }}
                   >
-                    <p className="font-display text-xl md:text-2xl font-medium">
+                    <p className="font-display" style={{ fontSize: "1.2rem", fontWeight: 500, color: "var(--ink)" }}>
                       {stat.value}
                     </p>
-                    <p className="font-mono-label text-ash/50 mt-1">
+                    <p className="font-mono-label" style={{ color: "rgba(146,138,122,0.4)", marginTop: "4px" }}>
                       {stat.label}
                     </p>
                   </motion.div>
@@ -204,26 +245,27 @@ function SedimentSection() {
 
 function Footer() {
   return (
-    <footer className="bg-ink text-bone py-20 md:py-28 px-6 md:px-10 lg:px-16">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
-          <div className="md:col-span-6">
-            <p className="font-display text-2xl md:text-3xl font-medium tracking-tight mb-4">
+    <footer className="bg-ink text-bone" style={{ padding: "80px 24px" }}>
+      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "48px" }}>
+          <div>
+            <p className="font-display" style={{ fontSize: "1.5rem", fontWeight: 500, letterSpacing: "-0.02em", marginBottom: "16px" }}>
               ÆON
             </p>
-            <p className="font-display text-bone/50 text-sm leading-relaxed max-w-sm">
+            <p className="font-display" style={{ color: "rgba(237,230,216,0.4)", fontSize: "0.875rem", lineHeight: 1.7, maxWidth: "400px" }}>
               A protocol for the long now. Built to endure beyond the quarters,
               the candles, and the noise.
             </p>
           </div>
-          <div className="md:col-span-6 md:flex md:justify-end">
-            <div className="grid grid-cols-2 gap-x-16 gap-y-3">
+          <div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px 64px" }}>
               {["Protocol", "The Long Now", "Ledger", "Genesis", "Archive"].map(
                 (link) => (
                   <a
                     key={link}
                     href={`/${link.toLowerCase().replace(" ", "-")}`}
-                    className="font-mono-label text-ash/50 hover:text-bone transition-colors duration-500"
+                    className="font-mono-label"
+                    style={{ color: "rgba(146,138,122,0.4)", transition: "color 0.5s", fontSize: "0.55rem" }}
                   >
                     {link}
                   </a>
@@ -232,11 +274,22 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 pt-8 border-t border-bone/10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <p className="font-mono-label text-ash/30 text-[0.5rem]">
+        <div
+          style={{
+            marginTop: "64px",
+            paddingTop: "32px",
+            borderTop: "1px solid rgba(237,230,216,0.08)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "16px",
+          }}
+        >
+          <p className="font-mono-label" style={{ color: "rgba(146,138,122,0.25)", fontSize: "0.45rem" }}>
             Block 5,120,000+ and counting
           </p>
-          <p className="font-mono-label text-ash/30 text-[0.5rem]">
+          <p className="font-mono-label" style={{ color: "rgba(146,138,122,0.25)", fontSize: "0.45rem" }}>
             The record persists
           </p>
         </div>
