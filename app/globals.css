@@ -2,7 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bone: #EDE6D8;
+  --ink: #16130E;
+  --oxide: #A6431F;
+  --verdigris: #3F5E4E;
+  --ochre: #C8943B;
+  --ash: #928A7A;
+}
 
 * {
   margin: 0;
@@ -15,11 +24,12 @@ html {
 }
 
 body {
-  background-color: #EDE6D8;
-  color: #16130E;
+  background-color: var(--bone);
+  color: var(--ink);
   font-family: 'Playfair Display', Georgia, serif;
   overflow-x: hidden;
-  cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @media (pointer: coarse) {
@@ -29,32 +39,52 @@ body {
 }
 
 ::selection {
-  background-color: #A6431F;
-  color: #EDE6D8;
+  background-color: var(--oxide);
+  color: var(--bone);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #EDE6D8;
+  background: var(--bone);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #928A7A;
+  background: var(--ash);
   border-radius: 2px;
 }
 
-/* Page transition wipe */
-.page-wipe {
+/* Grain overlay */
+.grain::after {
+  content: "";
   position: fixed;
   inset: 0;
-  z-index: 9999;
-  background: #A6431F;
-  transform: translateX(100%);
+  z-index: 60;
   pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bone: #1a1814;
+    --ink: #EDE6D8;
+    --oxide: #C85A30;
+    --verdigris: #5A8A6E;
+    --ochre: #D4A84D;
+    --ash: #6B6560;
+  }
+
+  body {
+    background-color: var(--bone);
+    color: var(--ink);
+  }
 }
 
 @layer utilities {
@@ -64,7 +94,8 @@ body {
   .font-mono-label {
     font-family: 'JetBrains Mono', monospace;
     text-transform: uppercase;
-    letter-spacing: 0.35em;
-    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    font-size: 0.6rem;
+    font-weight: 500;
   }
 }

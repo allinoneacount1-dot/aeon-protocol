@@ -1,14 +1,12 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import dynamic from "next/dynamic";
 
 const FlowFieldCanvas = dynamic(() => import("./FlowFieldCanvas"), {
   ssr: false,
 });
-
-const words = ["What", "survives", "the", "next", "aeon?"];
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,81 +15,80 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.4], [0, -60]);
   const clipPath = useTransform(
     scrollYProgress,
-    [0.1, 0.5],
+    [0.05, 0.4],
     ["inset(0% 0% 0% 0%)", "inset(0% 0% 100% 0%)"]
   );
 
   return (
-    <div ref={containerRef} className="relative h-[200vh]">
-      {/* Sticky hero container */}
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <div ref={containerRef} className="relative min-h-[250vh]">
+      <div className="sticky top-0 h-[100dvh] overflow-hidden">
+        {/* Shader background */}
         <FlowFieldCanvas />
 
-        {/* Hero content */}
+        {/* Hero content - asymmetric layout */}
         <motion.div
           style={{ opacity, y, clipPath }}
-          className="relative z-10 flex flex-col items-center justify-center h-full px-6 mix-blend-multiply"
+          className="relative z-10 h-full flex flex-col justify-end px-6 md:px-10 lg:px-16 pb-16 md:pb-24 mix-blend-multiply"
         >
-          {/* Micro-label */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 1.5 }}
-            className="font-mono-label text-ash mb-12 text-center"
-          >
-            ÆON / a protocol for the long now
-          </motion.p>
-
-          {/* Headline */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-[5.5rem] font-light tracking-tight text-center leading-[1.1] max-w-5xl mx-auto">
-            {words.map((word, i) => (
-              <Word key={i} word={word} index={i} />
-            ))}
-          </h1>
-
-          {/* Scroll indicator */}
+          {/* Top-left: minimal identifier */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 2.5, duration: 1 }}
-            className="absolute bottom-12 flex flex-col items-center gap-3"
+            transition={{ delay: 0.5, duration: 1.5 }}
+            className="absolute top-24 md:top-28 left-6 md:left-10 lg:left-16"
           >
-            <span className="font-mono-label text-ash text-[0.55rem]">Descend</span>
+            <p className="font-mono-label text-ash">
+              Est. before time
+            </p>
+          </motion.div>
+
+          {/* Headline - left-aligned, massive, asymmetric */}
+          <div className="max-w-4xl">
+            <motion.h1
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.4, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+              className="font-display text-[2.8rem] md:text-6xl lg:text-[5rem] xl:text-[5.8rem] font-medium tracking-tight leading-[0.95] text-left"
+            >
+              What survives
+              <br />
+              <span className="text-oxide">the next</span>
+              <br />
+              aeon?
+            </motion.h1>
+
+            {/* Sub-label */}
             <motion.div
-              animate={{ y: [0, 6, 0] }}
-              transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-              className="w-px h-8 bg-ash"
-            />
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2, duration: 1 }}
+              className="mt-8 md:mt-12 flex items-center gap-4"
+            >
+              <span className="w-12 h-px bg-oxide" />
+              <p className="font-mono-label text-ash">
+                A protocol for the long now
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Right-side vertical text */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.8, duration: 1.5 }}
+            className="absolute bottom-16 md:bottom-24 right-6 md:right-10 lg:right-16 hidden md:block"
+            style={{ writingMode: "vertical-lr" }}
+          >
+            <p className="font-mono-label text-ash text-[0.5rem]">
+              ÆON Protocol - Block 5,120,000+
+            </p>
           </motion.div>
         </motion.div>
       </div>
     </div>
-  );
-}
-
-function Word({ word, index }: { word: string; index: number }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: false, margin: "-10%" });
-
-  return (
-    <span className="inline-block overflow-hidden mr-[0.3em]">
-      <motion.span
-        ref={ref}
-        initial={{ y: "120%", opacity: 0 }}
-        animate={isInView ? { y: "0%", opacity: 1 } : { y: "120%", opacity: 0 }}
-        transition={{
-          duration: 1,
-          delay: index * 0.15,
-          ease: [0.22, 1, 0.36, 1],
-        }}
-        className="inline-block"
-      >
-        {word}
-      </motion.span>
-    </span>
   );
 }
